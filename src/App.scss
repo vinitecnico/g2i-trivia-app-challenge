@@ -1,0 +1,12 @@
+@import './scss/variables.scss';
+
+body {
+  background-color: $background-color;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+}
+
+.App {
+  text-align: left;
+  width:100%;
+}
