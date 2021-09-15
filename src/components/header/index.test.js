@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import Header from "./";
 
 test("Should Header is function", () => {
@@ -9,6 +9,6 @@ test("Should Header is function", () => {
 test("should render header", () => {
     const { container } = render(<Header />);
 
-    expect(container.querySelector('img')).toBeTruthy()
-    expect(container.querySelector('h1')).toHaveTextContent('City Bikes')
+    expect(container.querySelector('header')).toBeTruthy()
+    expect(container.querySelector('h1')).toHaveTextContent('Welcome to the trivia challenge!')
 });
