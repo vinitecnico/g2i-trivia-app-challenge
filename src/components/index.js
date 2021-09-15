@@ -1,3 +1,4 @@
 import Header from "./header";
+import FormQuestions from './formQuestions'
 
-export { Header};
+export { Header, FormQuestions};

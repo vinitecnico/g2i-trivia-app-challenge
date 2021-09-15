@@ -12,6 +12,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 
+import { FormQuestions } from "../../components";
+
 import "./styles.scss";
 
 const Home = () => {
@@ -107,50 +109,12 @@ const Home = () => {
             )}
 
             {started && !showResult && (
-              <>
-                {questions?.map(
-                  (
-                    { category, question, difficulty, selected = "" },
-                    index
-                  ) => (
-                    <article key={index}>
-                      <FormControl component="fieldset">
-                        <FormLabel component="legend">
-                          {decode(question)}
-                        </FormLabel>
-                        <FormLabel>
-                          {category} - {difficulty}
-                        </FormLabel>
-                        <RadioGroup
-                          aria-label={`question-${index}`}
-                          name={`question-${index}`}
-                          value={selected}
-                          onChange={(event) => handleChange(event, index)}
-                        >
-                          <FormControlLabel
-                            value="True"
-                            control={<Radio />}
-                            label="True"
-                          />
-                          <FormControlLabel
-                            value="False"
-                            control={<Radio />}
-                            label="False"
-                          />
-                        </RadioGroup>
-                      </FormControl>
-                    </article>
-                  )
-                )}
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={finishQuestions}
-                  disabled={numberOfResponses < 10}
-                >
-                  finish
-                </Button>
-              </>
+              <FormQuestions
+                questions={questions}
+                handleChange={handleChange}
+                finishQuestions={finishQuestions}
+                disabledButton={numberOfResponses < 10}
+              />
             )}
 
             {showResult && (
