@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { decode } from "html-entities";
 import { getQuestions } from "../../clients";
 import Button from "@material-ui/core/Button";
@@ -18,24 +18,24 @@ const Home = () => {
   const [questions, setQuestions] = useState([]);
   const [started, setStarted] = useState(false);
   const [showResult, setShowResult] = useState(false);
-  const [difficulty, setDifficulty] = useState('hard')
-
-  useEffect(() => {
-    init();
-  }, []);
+  const [difficulty, setDifficulty] = useState("hard");
 
   const init = async () => {
-    const response = await getQuestions();
+    const response = await getQuestions({ difficulty });
     setQuestions(response?.data?.results);
   };
 
-  const startQuestions = () => setStarted(true);
+  const startQuestions = () => {
+    setStarted(true);
+    init();
+  };
+
   const handleChange = (event, index) => {
     questions[index].selected = event.target.value;
     setQuestions([...questions]);
   };
 
-  const handleChangeDifficulty = event => setDifficulty(event.target.value)
+  const handleChangeDifficulty = (event) => setDifficulty(event.target.value);
 
   const finishQuestions = () => {
     setShowResult(true);
@@ -69,31 +69,33 @@ const Home = () => {
               <>
                 <h1>You will be presented with 10 True or False questions.</h1>
                 <h2>Can you score 100% ?</h2>
-                <FormControl component="fieldset">
-                  <FormLabel component="legend">difficulty</FormLabel>
-                  <RadioGroup
-                    aria-label="difficulty"
-                    name="difficulty"
-                    value={difficulty}
-                    onChange={handleChangeDifficulty}
-                  >
-                    <FormControlLabel
-                      value="easy"
-                      control={<Radio />}
-                      label="easy"
-                    />
-                    <FormControlLabel
-                      value="medium"
-                      control={<Radio />}
-                      label="medium"
-                    />
-                    <FormControlLabel
-                      value="hard"
-                      control={<Radio />}
-                      label="hard"
-                    />
-                  </RadioGroup>
-                </FormControl>
+                <article>
+                  <FormControl component="fieldset">
+                    <FormLabel component="legend">difficulty</FormLabel>
+                    <RadioGroup
+                      aria-label="difficulty"
+                      name="difficulty"
+                      value={difficulty}
+                      onChange={handleChangeDifficulty}
+                    >
+                      <FormControlLabel
+                        value="easy"
+                        control={<Radio />}
+                        label="easy"
+                      />
+                      <FormControlLabel
+                        value="medium"
+                        control={<Radio />}
+                        label="medium"
+                      />
+                      <FormControlLabel
+                        value="hard"
+                        control={<Radio />}
+                        label="hard"
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                </article>
                 <Button
                   variant="contained"
                   color="primary"
