@@ -1,4 +1,6 @@
 import Header from "./header";
-import FormQuestions from './formQuestions'
+import FormQuestions from "./formQuestions";
+import ResultQuestions from "./resultQuestions";
+import HeaderQuestions from "./headerQuestions"
 
-export { Header, FormQuestions};
+export { Header, FormQuestions, ResultQuestions, HeaderQuestions };

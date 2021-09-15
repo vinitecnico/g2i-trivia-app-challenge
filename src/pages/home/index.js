@@ -1,18 +1,14 @@
 import React, { useState } from "react";
-import { decode } from "html-entities";
 import { getQuestions } from "../../clients";
-import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
-
-import { FormQuestions } from "../../components";
+import {
+  HeaderQuestions,
+  FormQuestions,
+  ResultQuestions,
+} from "../../components";
 
 import "./styles.scss";
 
@@ -22,14 +18,14 @@ const Home = () => {
   const [showResult, setShowResult] = useState(false);
   const [difficulty, setDifficulty] = useState("hard");
 
-  const init = async () => {
+  const loadingQuestions = async () => {
     const response = await getQuestions({ difficulty });
     setQuestions(response?.data?.results);
   };
 
   const startQuestions = () => {
     setStarted(true);
-    init();
+    loadingQuestions();
   };
 
   const handleChange = (event, index) => {
@@ -37,7 +33,7 @@ const Home = () => {
     setQuestions([...questions]);
   };
 
-  const handleChangeDifficulty = (event) => setDifficulty(event.target.value);
+  const handleChangeDifficulty = (event) => setDifficulty(event?.target?.value);
 
   const finishQuestions = () => {
     setShowResult(true);
@@ -46,16 +42,8 @@ const Home = () => {
   const playAgain = () => {
     setStarted(false);
     setShowResult(false);
-    init();
+    loadingQuestions();
   };
-
-  const Right = () => <span style={{ color: "green" }}>✔ </span>;
-  const Wrong = () => <span style={{ color: "red" }}>✘ </span>;
-
-  const score = questions?.reduce(
-    (acc, curr) => (curr.correct_answer === curr.selected ? acc + 1 : acc),
-    0
-  );
 
   const numberOfResponses = questions?.reduce(
     (acc, curr) => (curr.selected ? acc + 1 : acc),
@@ -68,44 +56,11 @@ const Home = () => {
         <Card>
           <CardContent>
             {!started && (
-              <>
-                <h1>You will be presented with 10 True or False questions.</h1>
-                <h2>Can you score 100% ?</h2>
-                <article>
-                  <FormControl component="fieldset">
-                    <FormLabel component="legend">difficulty</FormLabel>
-                    <RadioGroup
-                      aria-label="difficulty"
-                      name="difficulty"
-                      value={difficulty}
-                      onChange={handleChangeDifficulty}
-                    >
-                      <FormControlLabel
-                        value="easy"
-                        control={<Radio />}
-                        label="easy"
-                      />
-                      <FormControlLabel
-                        value="medium"
-                        control={<Radio />}
-                        label="medium"
-                      />
-                      <FormControlLabel
-                        value="hard"
-                        control={<Radio />}
-                        label="hard"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </article>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={startQuestions}
-                >
-                  BEGIN
-                </Button>
-              </>
+              <HeaderQuestions
+                difficulty={difficulty}
+                handleChangeDifficulty={handleChangeDifficulty}
+                startQuestions={startQuestions}
+              />
             )}
 
             {started && !showResult && (
@@ -118,26 +73,7 @@ const Home = () => {
             )}
 
             {showResult && (
-              <>
-                <div className="card">
-                  <h1>You Scored {score} / 10</h1>
-                </div>
-                <div className="card">
-                  {questions?.map((question, idx) => (
-                    <h1 key={idx}>
-                      {question.correct_answer === question.selected ? (
-                        <Right />
-                      ) : (
-                        <Wrong />
-                      )}
-                      {decode(question.question)}
-                    </h1>
-                  ))}
-                </div>
-                <Button variant="contained" color="primary" onClick={playAgain}>
-                  PLAY AGAIN ?
-                </Button>
-              </>
+              <ResultQuestions questions={questions} playAgain={playAgain} />
             )}
           </CardContent>
         </Card>
